@@ -1,0 +1,2013 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>CyberForge — AI Infrastructure Platform</title>
+<style>
+  :root {
+    --void: #000308;
+    --deep: #030a14;
+    --panel: #060d1a;
+    --glass: rgba(0,255,170,0.04);
+    --edge: rgba(0,255,170,0.12);
+    --edge2: rgba(0,255,170,0.25);
+    --neon: #00ffaa;
+    --neon2: #00c8ff;
+    --neon3: #7b5ea7;
+    --warn: #ff6b35;
+    --text: #e2e8f0;
+    --muted: #64748b;
+    --faint: #0f1f35;
+    --font: 'JetBrains Mono', 'Fira Code', monospace;
+    --sans: 'Inter', system-ui, sans-serif;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--void);
+    color: var(--text);
+    font-family: var(--sans);
+    overflow-x: hidden;
+    min-height: 100vh;
+  }
+
+  /* ── STAR FIELD ── */
+  #starfield {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 2.5rem;
+    height: 60px;
+    background: rgba(0,3,8,0.85);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--edge);
+  }
+
+  .nav-logo {
+    font-family: var(--font);
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--neon);
+    letter-spacing: 0.08em;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .nav-logo::before {
+    content: '⬡';
+    font-size: 1.2rem;
+    animation: spin 8s linear infinite;
+    display: inline-block;
+  }
+
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  .nav-links {
+    display: flex;
+    gap: 2rem;
+    list-style: none;
+  }
+
+  .nav-links a {
+    font-size: 0.78rem;
+    font-family: var(--font);
+    color: var(--muted);
+    text-decoration: none;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    transition: color 0.2s;
+  }
+
+  .nav-links a:hover { color: var(--neon); }
+
+  .nav-cta {
+    font-family: var(--font);
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--void);
+    background: var(--neon);
+    border: none;
+    padding: 0.45rem 1.2rem;
+    letter-spacing: 0.06em;
+    cursor: pointer;
+    transition: opacity 0.2s;
+    text-transform: uppercase;
+  }
+
+  .nav-cta:hover { opacity: 0.85; }
+
+  /* ── HERO ── */
+  .hero {
+    position: relative;
+    z-index: 1;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 6rem 2rem 4rem;
+  }
+
+  .hero-badge {
+    font-family: var(--font);
+    font-size: 0.68rem;
+    letter-spacing: 0.15em;
+    color: var(--neon);
+    background: rgba(0,255,170,0.08);
+    border: 1px solid var(--edge);
+    padding: 0.3rem 1rem;
+    margin-bottom: 2rem;
+    text-transform: uppercase;
+  }
+
+  .hero-title {
+    font-family: var(--font);
+    font-size: clamp(2.4rem, 7vw, 5.5rem);
+    font-weight: 700;
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+    margin-bottom: 1.5rem;
+  }
+
+  .hero-title .line1 { color: var(--text); }
+
+  .hero-title .line2 {
+    color: var(--neon);
+    text-shadow: 0 0 60px rgba(0,255,170,0.4);
+  }
+
+  .hero-sub {
+    font-size: 1.05rem;
+    color: var(--muted);
+    max-width: 560px;
+    line-height: 1.7;
+    margin-bottom: 3rem;
+  }
+
+  .hero-actions {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .btn-primary {
+    font-family: var(--font);
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--void);
+    background: var(--neon);
+    border: none;
+    padding: 0.85rem 2rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-decoration: none;
+    display: inline-block;
+  }
+
+  .btn-primary:hover {
+    background: #fff;
+    transform: translateY(-1px);
+  }
+
+  .btn-ghost {
+    font-family: var(--font);
+    font-size: 0.8rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--neon);
+    background: transparent;
+    border: 1px solid var(--edge2);
+    padding: 0.85rem 2rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-decoration: none;
+    display: inline-block;
+  }
+
+  .btn-ghost:hover {
+    background: var(--glass);
+    border-color: var(--neon);
+  }
+
+  /* ── SCAN LINE EFFECT ── */
+  .scan-line {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--neon), transparent);
+    opacity: 0.15;
+    animation: scan 6s linear infinite;
+    z-index: 200;
+    pointer-events: none;
+  }
+
+  @keyframes scan {
+    from { top: -2px; }
+    to { top: 100vh; }
+  }
+
+  /* ── METRICS STRIP ── */
+  .metrics {
+    position: relative;
+    z-index: 1;
+    background: var(--deep);
+    border-top: 1px solid var(--edge);
+    border-bottom: 1px solid var(--edge);
+    padding: 2rem;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0;
+  }
+
+  .metric-item {
+    padding: 1.5rem 2rem;
+    border-right: 1px solid var(--edge);
+    text-align: center;
+  }
+
+  .metric-item:last-child { border-right: none; }
+
+  .metric-val {
+    font-family: var(--font);
+    font-size: 2.2rem;
+    font-weight: 700;
+    color: var(--neon);
+    line-height: 1;
+    margin-bottom: 0.4rem;
+  }
+
+  .metric-label {
+    font-size: 0.72rem;
+    font-family: var(--font);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  /* ── SECTION WRAPPER ── */
+  .section {
+    position: relative;
+    z-index: 1;
+    padding: 5rem 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .section-tag {
+    font-family: var(--font);
+    font-size: 0.65rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--neon);
+    margin-bottom: 0.75rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .section-tag::before {
+    content: '';
+    width: 24px; height: 1px;
+    background: var(--neon);
+    display: inline-block;
+  }
+
+  .section-title {
+    font-family: var(--font);
+    font-size: clamp(1.6rem, 3.5vw, 2.4rem);
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 1rem;
+    letter-spacing: -0.01em;
+  }
+
+  .section-sub {
+    font-size: 1rem;
+    color: var(--muted);
+    line-height: 1.7;
+    max-width: 520px;
+    margin-bottom: 3rem;
+  }
+
+  /* ── PROJECT CARDS ── */
+  .projects-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+    gap: 1.5rem;
+  }
+
+  .proj-card {
+    background: var(--panel);
+    border: 1px solid var(--edge);
+    padding: 2rem;
+    position: relative;
+    overflow: hidden;
+    transition: border-color 0.2s, transform 0.2s;
+    cursor: pointer;
+  }
+
+  .proj-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 3px;
+    background: var(--neon);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.3s;
+  }
+
+  .proj-card:hover {
+    border-color: var(--edge2);
+    transform: translateY(-3px);
+  }
+
+  .proj-card:hover::before { transform: scaleX(1); }
+
+  .proj-card.featured { border-color: rgba(0,255,170,0.3); }
+
+  .proj-card.featured::before { transform: scaleX(1); }
+
+  .proj-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    margin-bottom: 1.25rem;
+    gap: 1rem;
+  }
+
+  .proj-icon {
+    width: 44px; height: 44px;
+    background: rgba(0,255,170,0.1);
+    border: 1px solid var(--edge);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.3rem;
+    flex-shrink: 0;
+  }
+
+  .proj-badges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    justify-content: flex-end;
+  }
+
+  .badge {
+    font-family: var(--font);
+    font-size: 0.6rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 0.2rem 0.55rem;
+    border: 1px solid;
+  }
+
+  .badge-green { color: var(--neon); border-color: rgba(0,255,170,0.3); background: rgba(0,255,170,0.06); }
+  .badge-blue { color: var(--neon2); border-color: rgba(0,200,255,0.3); background: rgba(0,200,255,0.06); }
+  .badge-purple { color: #a78bfa; border-color: rgba(167,139,250,0.3); background: rgba(167,139,250,0.06); }
+  .badge-orange { color: var(--warn); border-color: rgba(255,107,53,0.3); background: rgba(255,107,53,0.06); }
+
+  .proj-title {
+    font-family: var(--font);
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 0.5rem;
+    letter-spacing: -0.01em;
+  }
+
+  .proj-desc {
+    font-size: 0.88rem;
+    color: var(--muted);
+    line-height: 1.65;
+    margin-bottom: 1.5rem;
+  }
+
+  .proj-stack {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .stack-tag {
+    font-family: var(--font);
+    font-size: 0.65rem;
+    color: var(--muted);
+    background: var(--faint);
+    padding: 0.2rem 0.6rem;
+    border: 1px solid rgba(255,255,255,0.05);
+  }
+
+  .proj-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-top: 1.25rem;
+    border-top: 1px solid var(--edge);
+    gap: 0.75rem;
+  }
+
+  .proj-download {
+    font-family: var(--font);
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--void);
+    background: var(--neon);
+    border: none;
+    padding: 0.55rem 1.1rem;
+    cursor: pointer;
+    transition: opacity 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    text-decoration: none;
+  }
+
+  .proj-download:hover { opacity: 0.85; }
+
+  .proj-view {
+    font-family: var(--font);
+    font-size: 0.72rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--neon);
+    background: transparent;
+    border: 1px solid var(--edge);
+    padding: 0.55rem 1rem;
+    cursor: pointer;
+    transition: border-color 0.2s;
+    text-decoration: none;
+    display: inline-block;
+  }
+
+  .proj-view:hover { border-color: var(--neon); }
+
+  .proj-complexity {
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+    margin-left: auto;
+  }
+
+  .complexity-dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--faint);
+    border: 1px solid var(--edge);
+  }
+
+  .complexity-dot.active { background: var(--neon); border-color: var(--neon); }
+
+  /* ── RAG PIPELINE VISUAL ── */
+  .pipeline-wrap {
+    background: var(--panel);
+    border: 1px solid var(--edge);
+    padding: 2.5rem;
+    margin-bottom: 3rem;
+    overflow-x: auto;
+  }
+
+  .pipeline-title {
+    font-family: var(--font);
+    font-size: 0.7rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--neon);
+    margin-bottom: 2rem;
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+  }
+
+  .pipeline-title::before {
+    content: '';
+    width: 8px; height: 8px;
+    background: var(--neon);
+    border-radius: 50%;
+    animation: pulse 1.5s ease-in-out infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.5; transform: scale(0.8); }
+  }
+
+  .pipeline-flow {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    min-width: 700px;
+  }
+
+  .pipe-node {
+    flex: 1;
+    background: var(--faint);
+    border: 1px solid var(--edge);
+    padding: 1rem 0.75rem;
+    text-align: center;
+    position: relative;
+  }
+
+  .pipe-node.active-node {
+    border-color: var(--neon);
+    background: rgba(0,255,170,0.06);
+  }
+
+  .pipe-node-icon { font-size: 1.4rem; margin-bottom: 0.4rem; }
+
+  .pipe-node-label {
+    font-family: var(--font);
+    font-size: 0.65rem;
+    font-weight: 700;
+    color: var(--text);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    margin-bottom: 0.25rem;
+  }
+
+  .pipe-node-sub {
+    font-size: 0.65rem;
+    color: var(--muted);
+    line-height: 1.4;
+  }
+
+  .pipe-arrow {
+    width: 32px;
+    height: 2px;
+    background: var(--edge2);
+    flex-shrink: 0;
+    position: relative;
+  }
+
+  .pipe-arrow::after {
+    content: '▶';
+    position: absolute;
+    right: -4px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 0.5rem;
+    color: var(--neon);
+  }
+
+  /* ── FEATURES ── */
+  .features-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 1rem;
+  }
+
+  .feat-card {
+    background: var(--panel);
+    border: 1px solid var(--edge);
+    padding: 1.75rem;
+    transition: border-color 0.2s;
+  }
+
+  .feat-card:hover { border-color: var(--edge2); }
+
+  .feat-icon {
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+  }
+
+  .feat-title {
+    font-family: var(--font);
+    font-size: 0.88rem;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 0.5rem;
+  }
+
+  .feat-desc {
+    font-size: 0.82rem;
+    color: var(--muted);
+    line-height: 1.6;
+  }
+
+  /* ── TERMINAL DEMO ── */
+  .terminal {
+    background: #010b14;
+    border: 1px solid var(--edge);
+    border-radius: 0;
+    overflow: hidden;
+    margin-bottom: 3rem;
+  }
+
+  .terminal-bar {
+    background: var(--panel);
+    border-bottom: 1px solid var(--edge);
+    padding: 0.6rem 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .t-dot { width: 10px; height: 10px; border-radius: 50%; }
+  .t-dot.red { background: #ff5f56; }
+  .t-dot.yellow { background: #ffbd2e; }
+  .t-dot.green { background: #27c93f; }
+
+  .t-title {
+    font-family: var(--font);
+    font-size: 0.7rem;
+    color: var(--muted);
+    margin-left: 0.5rem;
+    letter-spacing: 0.06em;
+  }
+
+  .terminal-body {
+    padding: 1.5rem;
+    font-family: var(--font);
+    font-size: 0.8rem;
+    line-height: 1.8;
+  }
+
+  .t-prompt { color: var(--neon); }
+  .t-cmd { color: var(--text); }
+  .t-out { color: var(--muted); }
+  .t-highlight { color: var(--neon2); }
+  .t-success { color: #27c93f; }
+  .t-warn { color: var(--warn); }
+
+  /* ── CTA SECTION ── */
+  .cta-section {
+    position: relative;
+    z-index: 1;
+    background: var(--deep);
+    border-top: 1px solid var(--edge);
+    border-bottom: 1px solid var(--edge);
+    padding: 5rem 2rem;
+    text-align: center;
+    overflow: hidden;
+  }
+
+  .cta-section::before {
+    content: '';
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    width: 600px; height: 300px;
+    background: radial-gradient(ellipse, rgba(0,255,170,0.06) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .cta-title {
+    font-family: var(--font);
+    font-size: clamp(1.8rem, 4vw, 3rem);
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 1rem;
+    position: relative;
+  }
+
+  .cta-sub {
+    font-size: 1rem;
+    color: var(--muted);
+    margin-bottom: 2.5rem;
+    position: relative;
+  }
+
+  /* ── DOWNLOAD MODAL ── */
+  .modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.85);
+    z-index: 500;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+  }
+
+  .modal-overlay.open { display: flex; }
+
+  .modal {
+    background: var(--deep);
+    border: 1px solid var(--edge2);
+    width: 100%;
+    max-width: 540px;
+    max-height: 90vh;
+    overflow-y: auto;
+  }
+
+  .modal-header {
+    background: var(--panel);
+    border-bottom: 1px solid var(--edge);
+    padding: 1.25rem 1.75rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .modal-title {
+    font-family: var(--font);
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: var(--text);
+    letter-spacing: 0.04em;
+  }
+
+  .modal-close {
+    background: none;
+    border: 1px solid var(--edge);
+    color: var(--muted);
+    width: 28px; height: 28px;
+    cursor: pointer;
+    font-size: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: border-color 0.2s;
+    font-family: var(--font);
+  }
+
+  .modal-close:hover { border-color: var(--warn); color: var(--warn); }
+
+  .modal-body { padding: 1.75rem; }
+
+  .modal-section-title {
+    font-family: var(--font);
+    font-size: 0.7rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--neon);
+    margin-bottom: 0.75rem;
+    margin-top: 1.5rem;
+  }
+
+  .modal-section-title:first-child { margin-top: 0; }
+
+  .file-list { display: flex; flex-direction: column; gap: 0.5rem; }
+
+  .file-item {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    background: var(--faint);
+    border: 1px solid var(--edge);
+    padding: 0.75rem 1rem;
+    font-family: var(--font);
+    font-size: 0.75rem;
+    color: var(--muted);
+    transition: border-color 0.2s;
+  }
+
+  .file-item:hover { border-color: var(--edge2); color: var(--text); }
+
+  .file-item .file-icon { font-size: 1rem; }
+
+  .file-size {
+    margin-left: auto;
+    font-size: 0.65rem;
+    color: var(--muted);
+    opacity: 0.6;
+  }
+
+  .modal-download-all {
+    width: 100%;
+    font-family: var(--font);
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--void);
+    background: var(--neon);
+    border: none;
+    padding: 1rem;
+    cursor: pointer;
+    margin-top: 1.75rem;
+    transition: opacity 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+  }
+
+  .modal-download-all:hover { opacity: 0.85; }
+
+  .modal-note {
+    font-size: 0.72rem;
+    color: var(--muted);
+    text-align: center;
+    margin-top: 0.75rem;
+    line-height: 1.5;
+  }
+
+  /* ── SCROLLING TICKER ── */
+  .ticker-wrap {
+    position: relative;
+    z-index: 1;
+    background: var(--deep);
+    border-top: 1px solid var(--edge);
+    border-bottom: 1px solid var(--edge);
+    overflow: hidden;
+    height: 40px;
+    display: flex;
+    align-items: center;
+  }
+
+  .ticker {
+    display: flex;
+    gap: 4rem;
+    animation: ticker 22s linear infinite;
+    white-space: nowrap;
+  }
+
+  @keyframes ticker {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+  }
+
+  .ticker-item {
+    font-family: var(--font);
+    font-size: 0.68rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    flex-shrink: 0;
+  }
+
+  .ticker-dot { color: var(--neon); }
+
+  /* ── FOOTER ── */
+  footer {
+    position: relative;
+    z-index: 1;
+    background: var(--panel);
+    border-top: 1px solid var(--edge);
+    padding: 3rem 2rem;
+    text-align: center;
+  }
+
+  .footer-logo {
+    font-family: var(--font);
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--neon);
+    margin-bottom: 0.75rem;
+  }
+
+  .footer-sub {
+    font-size: 0.8rem;
+    color: var(--muted);
+    margin-bottom: 2rem;
+  }
+
+  .footer-links {
+    display: flex;
+    gap: 2rem;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-bottom: 2rem;
+  }
+
+  .footer-links a {
+    font-family: var(--font);
+    font-size: 0.7rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--muted);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+
+  .footer-links a:hover { color: var(--neon); }
+
+  .footer-copy {
+    font-size: 0.72rem;
+    color: var(--muted);
+    opacity: 0.5;
+  }
+
+  /* ── LIVE STATUS ── */
+  .status-bar {
+    position: fixed;
+    bottom: 1.5rem;
+    right: 1.5rem;
+    z-index: 100;
+    background: var(--deep);
+    border: 1px solid var(--edge);
+    padding: 0.6rem 1rem;
+    font-family: var(--font);
+    font-size: 0.65rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--neon);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .status-pulse {
+    width: 7px; height: 7px;
+    border-radius: 50%;
+    background: var(--neon);
+    animation: pulse 1.5s ease-in-out infinite;
+  }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 768px) {
+    .metrics { grid-template-columns: repeat(2, 1fr); }
+    .metric-item:nth-child(2) { border-right: none; }
+    nav { padding: 0 1.25rem; }
+    .nav-links { display: none; }
+    .pipeline-flow { min-width: 900px; }
+  }
+
+  @media (max-width: 480px) {
+    .metrics { grid-template-columns: 1fr; }
+    .metric-item { border-right: none; border-bottom: 1px solid var(--edge); }
+    .hero-title { font-size: 2rem; }
+  }
+</style>
+</head>
+<body>
+
+<!-- Scan line -->
+<div class="scan-line"></div>
+
+<!-- Star field canvas -->
+<canvas id="starfield"></canvas>
+
+<!-- Status indicator -->
+<div class="status-bar">
+  <div class="status-pulse"></div>
+  <span>System Online — 14 Projects Ready</span>
+</div>
+
+<!-- Navigation -->
+<nav>
+  <div class="nav-logo">CyberForge</div>
+  <ul class="nav-links">
+    <li><a href="#projects">Projects</a></li>
+    <li><a href="#pipeline">RAG Pipeline</a></li>
+    <li><a href="#features">Features</a></li>
+    <li><a href="#docs">Docs</a></li>
+  </ul>
+  <button class="nav-cta" onclick="openModal('all')">Download All</button>
+</nav>
+
+<!-- Hero -->
+<section class="hero">
+  <div class="hero-badge">⬡ Enterprise AI Infrastructure · 2025</div>
+  <h1 class="hero-title">
+    <span class="line1">Build the Stack</span><br>
+    <span class="line2">Companies Need Now</span>
+  </h1>
+  <p class="hero-sub">Production-ready RAG pipelines, AI tool managers, vector search APIs, and LLM orchestration — downloadable, deployable, documented.</p>
+  <div class="hero-actions">
+    <a href="#projects" class="btn-primary">Browse Projects ↓</a>
+    <a href="#pipeline" class="btn-ghost">See RAG Pipeline</a>
+  </div>
+</section>
+
+<!-- Metrics -->
+<div class="metrics">
+  <div class="metric-item">
+    <div class="metric-val" id="c1">0</div>
+    <div class="metric-label">Projects Ready</div>
+  </div>
+  <div class="metric-item">
+    <div class="metric-val" id="c2">0</div>
+    <div class="metric-label">Lines of Code</div>
+  </div>
+  <div class="metric-item">
+    <div class="metric-val" id="c3">0</div>
+    <div class="metric-label">Tech Stacks</div>
+  </div>
+  <div class="metric-item">
+    <div class="metric-val" id="c4">0</div>
+    <div class="metric-label">Download-Ready Files</div>
+  </div>
+</div>
+
+<!-- Ticker -->
+<div class="ticker-wrap">
+  <div class="ticker" id="ticker">
+    <span class="ticker-item"><span class="ticker-dot">◆</span> RAG Pipeline</span>
+    <span class="ticker-item"><span class="ticker-dot">◆</span> AI Tool Manager</span>
+    <span class="ticker-item"><span class="ticker-dot">◆</span> Vector Search API</span>
+    <span class="ticker-item"><span class="ticker-dot">◆</span> LLM Router</span>
+    <span class="ticker-item"><span class="ticker-dot">◆</span> Prompt Registry</span>
+    <span class="ticker-item"><span class="ticker-dot">◆</span> Embedding Service</span>
+    <span class="ticker-item"><span class="ticker-dot">◆</span> Agent Orchestrator</span>
+    <span class="ticker-item"><span class="ticker-dot">◆</span> Model Gateway</span>
+    <span class="ticker-item"><span class="ticker-dot">◆</span> RAG Pipeline</span>
+    <span class="ticker-item"><span class="ticker-dot">◆</span> AI Tool Manager</span>
+    <span class="ticker-item"><span class="ticker-dot">◆</span> Vector Search API</span>
+    <span class="ticker-item"><span class="ticker-dot">◆</span> LLM Router</span>
+    <span class="ticker-item"><span class="ticker-dot">◆</span> Prompt Registry</span>
+    <span class="ticker-item"><span class="ticker-dot">◆</span> Embedding Service</span>
+    <span class="ticker-item"><span class="ticker-dot">◆</span> Agent Orchestrator</span>
+    <span class="ticker-item"><span class="ticker-dot">◆</span> Model Gateway</span>
+  </div>
+</div>
+
+<!-- Projects Section -->
+<section class="section" id="projects">
+  <div class="section-tag">Ready to Deploy</div>
+  <h2 class="section-title">Production AI Projects</h2>
+  <p class="section-sub">Every project ships with full source code, Docker config, environment setup, and README. One download, one command, live in minutes.</p>
+
+  <div class="projects-grid">
+
+    <!-- Project 1: RAG Pipeline -->
+    <div class="proj-card featured">
+      <div class="proj-header">
+        <div class="proj-icon">🔍</div>
+        <div class="proj-badges">
+          <span class="badge badge-green">Featured</span>
+          <span class="badge badge-blue">Full-Stack</span>
+        </div>
+      </div>
+      <div class="proj-title">RAG Pipeline Engine</div>
+      <div class="proj-desc">Complete Retrieval-Augmented Generation system with document ingestion, chunking, vector embedding, semantic search, and LLM-powered answer synthesis. Production-grade with Redis caching.</div>
+      <div class="proj-stack">
+        <span class="stack-tag">Python</span>
+        <span class="stack-tag">FastAPI</span>
+        <span class="stack-tag">LangChain</span>
+        <span class="stack-tag">Pinecone</span>
+        <span class="stack-tag">OpenAI</span>
+        <span class="stack-tag">Redis</span>
+        <span class="stack-tag">Docker</span>
+        <span class="stack-tag">React</span>
+      </div>
+      <div class="proj-footer">
+        <button class="proj-download" onclick="openModal('rag')">↓ Download</button>
+        <a href="#pipeline" class="proj-view">View Docs</a>
+        <div class="proj-complexity">
+          <div class="complexity-dot active"></div>
+          <div class="complexity-dot active"></div>
+          <div class="complexity-dot active"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Project 2: AI Tool Manager -->
+    <div class="proj-card featured">
+      <div class="proj-header">
+        <div class="proj-icon">⚙️</div>
+        <div class="proj-badges">
+          <span class="badge badge-green">Featured</span>
+          <span class="badge badge-purple">SaaS-Ready</span>
+        </div>
+      </div>
+      <div class="proj-title">AI Tool Manager App</div>
+      <div class="proj-desc">Centralized dashboard to register, version, monitor, and rate-limit AI tools and APIs. Multi-tenant, with usage analytics, cost tracking per model, and webhook triggers.</div>
+      <div class="proj-stack">
+        <span class="stack-tag">Next.js 14</span>
+        <span class="stack-tag">TypeScript</span>
+        <span class="stack-tag">Prisma</span>
+        <span class="stack-tag">PostgreSQL</span>
+        <span class="stack-tag">Stripe</span>
+        <span class="stack-tag">Clerk</span>
+        <span class="stack-tag">Tailwind</span>
+      </div>
+      <div class="proj-footer">
+        <button class="proj-download" onclick="openModal('tool-manager')">↓ Download</button>
+        <a href="#" class="proj-view">View Demo</a>
+        <div class="proj-complexity">
+          <div class="complexity-dot active"></div>
+          <div class="complexity-dot active"></div>
+          <div class="complexity-dot active"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Project 3: LLM Router -->
+    <div class="proj-card">
+      <div class="proj-header">
+        <div class="proj-icon">🔀</div>
+        <div class="proj-badges">
+          <span class="badge badge-blue">API</span>
+          <span class="badge badge-orange">Cost-Saver</span>
+        </div>
+      </div>
+      <div class="proj-title">Smart LLM Router</div>
+      <div class="proj-desc">Intelligent request routing across GPT-4, Claude, Gemini, and open-source models based on cost, latency, and task complexity. Includes fallback chains and A/B testing.</div>
+      <div class="proj-stack">
+        <span class="stack-tag">Node.js</span>
+        <span class="stack-tag">Express</span>
+        <span class="stack-tag">Redis</span>
+        <span class="stack-tag">OpenAI SDK</span>
+        <span class="stack-tag">Anthropic SDK</span>
+        <span class="stack-tag">Prometheus</span>
+      </div>
+      <div class="proj-footer">
+        <button class="proj-download" onclick="openModal('llm-router')">↓ Download</button>
+        <a href="#" class="proj-view">View Docs</a>
+        <div class="proj-complexity">
+          <div class="complexity-dot active"></div>
+          <div class="complexity-dot active"></div>
+          <div class="complexity-dot"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Project 4: Vector Search API -->
+    <div class="proj-card">
+      <div class="proj-header">
+        <div class="proj-icon">🧬</div>
+        <div class="proj-badges">
+          <span class="badge badge-blue">Backend</span>
+          <span class="badge badge-green">High-Perf</span>
+        </div>
+      </div>
+      <div class="proj-title">Vector Search API</div>
+      <div class="proj-desc">Self-hosted semantic search engine with multi-index support, hybrid BM25 + dense retrieval, re-ranking, and a REST API. Beats managed solutions at 80% lower cost.</div>
+      <div class="proj-stack">
+        <span class="stack-tag">Python</span>
+        <span class="stack-tag">FastAPI</span>
+        <span class="stack-tag">Qdrant</span>
+        <span class="stack-tag">SentenceTransformers</span>
+        <span class="stack-tag">Elasticsearch</span>
+        <span class="stack-tag">Docker</span>
+      </div>
+      <div class="proj-footer">
+        <button class="proj-download" onclick="openModal('vector-search')">↓ Download</button>
+        <a href="#" class="proj-view">API Docs</a>
+        <div class="proj-complexity">
+          <div class="complexity-dot active"></div>
+          <div class="complexity-dot active"></div>
+          <div class="complexity-dot"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Project 5: Prompt Registry -->
+    <div class="proj-card">
+      <div class="proj-header">
+        <div class="proj-icon">📋</div>
+        <div class="proj-badges">
+          <span class="badge badge-purple">Team Tool</span>
+        </div>
+      </div>
+      <div class="proj-title">Prompt Registry & Versioner</div>
+      <div class="proj-desc">Git-like version control for LLM prompts. Teams can store, diff, test, and deploy prompts with evaluation pipelines and performance benchmarks built in.</div>
+      <div class="proj-stack">
+        <span class="stack-tag">Next.js</span>
+        <span class="stack-tag">MongoDB</span>
+        <span class="stack-tag">Python</span>
+        <span class="stack-tag">OpenAI Evals</span>
+        <span class="stack-tag">Vercel</span>
+      </div>
+      <div class="proj-footer">
+        <button class="proj-download" onclick="openModal('prompt-registry')">↓ Download</button>
+        <a href="#" class="proj-view">View Docs</a>
+        <div class="proj-complexity">
+          <div class="complexity-dot active"></div>
+          <div class="complexity-dot active"></div>
+          <div class="complexity-dot"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Project 6: AI Agent Orchestrator -->
+    <div class="proj-card">
+      <div class="proj-header">
+        <div class="proj-icon">🤖</div>
+        <div class="proj-badges">
+          <span class="badge badge-orange">Advanced</span>
+          <span class="badge badge-purple">Agentic</span>
+        </div>
+      </div>
+      <div class="proj-title">Multi-Agent Orchestrator</div>
+      <div class="proj-desc">Coordinate swarms of specialized AI agents — researcher, coder, validator, reviewer — with shared memory, task queues, and a visual flow editor for building complex workflows.</div>
+      <div class="proj-stack">
+        <span class="stack-tag">Python</span>
+        <span class="stack-tag">LangGraph</span>
+        <span class="stack-tag">CrewAI</span>
+        <span class="stack-tag">Celery</span>
+        <span class="stack-tag">React Flow</span>
+        <span class="stack-tag">PostgreSQL</span>
+      </div>
+      <div class="proj-footer">
+        <button class="proj-download" onclick="openModal('agent-orch')">↓ Download</button>
+        <a href="#" class="proj-view">View Demo</a>
+        <div class="proj-complexity">
+          <div class="complexity-dot active"></div>
+          <div class="complexity-dot active"></div>
+          <div class="complexity-dot active"></div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- RAG Pipeline Section -->
+<div style="background: var(--deep); border-top: 1px solid var(--edge); border-bottom: 1px solid var(--edge); position: relative; z-index: 1;">
+  <section class="section" id="pipeline">
+    <div class="section-tag">Architecture</div>
+    <h2 class="section-title">RAG Pipeline — How It Works</h2>
+    <p class="section-sub">The flagship project. Documents in, answers out. Every stage is modular and swappable.</p>
+
+    <div class="pipeline-wrap">
+      <div class="pipeline-title">Live Pipeline Flow</div>
+      <div style="overflow-x: auto;">
+        <div class="pipeline-flow">
+          <div class="pipe-node">
+            <div class="pipe-node-icon">📄</div>
+            <div class="pipe-node-label">Ingest</div>
+            <div class="pipe-node-sub">PDF, DOCX, URL, S3</div>
+          </div>
+          <div class="pipe-arrow"></div>
+          <div class="pipe-node">
+            <div class="pipe-node-icon">✂️</div>
+            <div class="pipe-node-label">Chunk</div>
+            <div class="pipe-node-sub">Smart splitter + overlap</div>
+          </div>
+          <div class="pipe-arrow"></div>
+          <div class="pipe-node active-node">
+            <div class="pipe-node-icon">🧬</div>
+            <div class="pipe-node-label">Embed</div>
+            <div class="pipe-node-sub">OpenAI / local models</div>
+          </div>
+          <div class="pipe-arrow"></div>
+          <div class="pipe-node active-node">
+            <div class="pipe-node-icon">🗄️</div>
+            <div class="pipe-node-label">Vector DB</div>
+            <div class="pipe-node-sub">Pinecone / Qdrant</div>
+          </div>
+          <div class="pipe-arrow"></div>
+          <div class="pipe-node">
+            <div class="pipe-node-icon">🔍</div>
+            <div class="pipe-node-label">Retrieve</div>
+            <div class="pipe-node-sub">Hybrid semantic + BM25</div>
+          </div>
+          <div class="pipe-arrow"></div>
+          <div class="pipe-node">
+            <div class="pipe-node-icon">🏆</div>
+            <div class="pipe-node-label">Rerank</div>
+            <div class="pipe-node-sub">Cohere / CrossEncoder</div>
+          </div>
+          <div class="pipe-arrow"></div>
+          <div class="pipe-node active-node">
+            <div class="pipe-node-icon">🤖</div>
+            <div class="pipe-node-label">Generate</div>
+            <div class="pipe-node-sub">GPT-4 / Claude / Llama</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Terminal demo -->
+    <div class="terminal">
+      <div class="terminal-bar">
+        <div class="t-dot red"></div>
+        <div class="t-dot yellow"></div>
+        <div class="t-dot green"></div>
+        <span class="t-title">cyberforge — rag-pipeline — bash</span>
+      </div>
+      <div class="terminal-body">
+        <div><span class="t-prompt">$ </span><span class="t-cmd">git clone https://github.com/cyberforge/rag-pipeline && cd rag-pipeline</span></div>
+        <div><span class="t-out">Cloning into 'rag-pipeline'...</span></div>
+        <div>&nbsp;</div>
+        <div><span class="t-prompt">$ </span><span class="t-cmd">cp .env.example .env  <span class="t-out"># add your OpenAI + Pinecone keys</span></span></div>
+        <div>&nbsp;</div>
+        <div><span class="t-prompt">$ </span><span class="t-cmd">docker compose up -d</span></div>
+        <div><span class="t-success">✔ Network rag_default Created</span></div>
+        <div><span class="t-success">✔ Container rag-redis Started</span></div>
+        <div><span class="t-success">✔ Container rag-api Started</span></div>
+        <div><span class="t-success">✔ Container rag-ui Started</span></div>
+        <div>&nbsp;</div>
+        <div><span class="t-prompt">$ </span><span class="t-cmd">curl -X POST http://localhost:8000/ingest \</span></div>
+        <div><span class="t-cmd">&nbsp;&nbsp;-F "file=@company_docs.pdf"</span></div>
+        <div><span class="t-highlight">{"status":"ok","chunks":247,"vectors_stored":247,"collection":"default"}</span></div>
+        <div>&nbsp;</div>
+        <div><span class="t-prompt">$ </span><span class="t-cmd">curl -X POST http://localhost:8000/query \</span></div>
+        <div><span class="t-cmd">&nbsp;&nbsp;-d '{"q":"What is our refund policy?","top_k":5}'</span></div>
+        <div><span class="t-highlight">{"answer":"Based on the docs, refunds are processed within...","sources":[...]}</span></div>
+        <div>&nbsp;</div>
+        <div><span class="t-out"># UI available at http://localhost:3000 🚀</span></div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- Features Section -->
+<section class="section" id="features">
+  <div class="section-tag">Why CyberForge</div>
+  <h2 class="section-title">What every project includes</h2>
+  <p class="section-sub">Not boilerplate. Not tutorials. Real production infrastructure companies are paying six figures to build.</p>
+
+  <div class="features-grid">
+    <div class="feat-card">
+      <div class="feat-icon">🐳</div>
+      <div class="feat-title">Docker-First</div>
+      <div class="feat-desc">Every project ships with Dockerfile and docker-compose.yml. One command from zero to running.</div>
+    </div>
+    <div class="feat-card">
+      <div class="feat-icon">🔑</div>
+      <div class="feat-title">Env-Configured</div>
+      <div class="feat-desc">.env.example with every variable documented. No hunting through code for config values.</div>
+    </div>
+    <div class="feat-card">
+      <div class="feat-icon">📡</div>
+      <div class="feat-title">REST + WebSocket</div>
+      <div class="feat-desc">Full API contracts with OpenAPI specs. Streaming endpoints where it matters (LLM responses).</div>
+    </div>
+    <div class="feat-card">
+      <div class="feat-icon">📊</div>
+      <div class="feat-title">Observability Built-in</div>
+      <div class="feat-desc">Prometheus metrics, structured logging, and Grafana dashboards pre-configured out of the box.</div>
+    </div>
+    <div class="feat-card">
+      <div class="feat-icon">🧪</div>
+      <div class="feat-title">Tests Included</div>
+      <div class="feat-desc">Unit + integration tests with coverage reports. CI/CD GitHub Actions workflows included.</div>
+    </div>
+    <div class="feat-card">
+      <div class="feat-icon">☁️</div>
+      <div class="feat-title">Cloud Deploy Guides</div>
+      <div class="feat-desc">Step-by-step guides for AWS, GCP, Vercel, Railway, and Render. IaC Terraform scripts included.</div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<div class="cta-section" id="docs">
+  <h2 class="cta-title">Start Building Today</h2>
+  <p class="cta-sub">Download any project, run it locally, ship it to production.</p>
+  <div style="display:flex; gap:1rem; justify-content:center; flex-wrap:wrap; position:relative;">
+    <button class="btn-primary" onclick="openModal('all')">↓ Download Full Bundle</button>
+    <a href="#projects" class="btn-ghost">Browse Projects</a>
+  </div>
+</div>
+
+<!-- Footer -->
+<footer>
+  <div class="footer-logo">⬡ CyberForge</div>
+  <div class="footer-sub">Enterprise AI Infrastructure, Ready to Ship</div>
+  <div class="footer-links">
+    <a href="#projects">Projects</a>
+    <a href="#pipeline">RAG Pipeline</a>
+    <a href="#features">Features</a>
+    <a href="#docs">Docs</a>
+  </div>
+  <div class="footer-copy">© 2025 CyberForge. Built for engineers who ship.</div>
+</footer>
+
+<!-- DOWNLOAD MODAL -->
+<div class="modal-overlay" id="modal">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title" id="modal-title">Download Project</div>
+      <button class="modal-close" onclick="closeModal()">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="modal-section-title">Project Files</div>
+      <div class="file-list" id="modal-files"></div>
+      <button class="modal-download-all" onclick="downloadProject()">
+        ↓ Download .zip Package
+      </button>
+      <p class="modal-note">Includes all source files, Dockerfile, .env.example, and full README.md</p>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ── STAR FIELD + METEOR SHOWER ── */
+(function() {
+  const canvas = document.getElementById('starfield');
+  const ctx = canvas.getContext('2d');
+
+  let W, H, stars = [], meteors = [];
+
+  function resize() {
+    W = canvas.width = window.innerWidth;
+    H = canvas.height = window.innerHeight;
+  }
+
+  resize();
+  window.addEventListener('resize', resize);
+
+  // Create stars
+  for (let i = 0; i < 280; i++) {
+    stars.push({
+      x: Math.random() * 2000,
+      y: Math.random() * 2000,
+      r: Math.random() * 1.4 + 0.2,
+      o: Math.random() * 0.7 + 0.1,
+      tw: Math.random() * 4 + 2,
+      phase: Math.random() * Math.PI * 2
+    });
+  }
+
+  // Meteor shower
+  function spawnMeteor() {
+    meteors.push({
+      x: Math.random() * W * 1.5,
+      y: -20,
+      len: Math.random() * 120 + 60,
+      speed: Math.random() * 6 + 6,
+      op: 1,
+      angle: Math.PI / 4 + (Math.random() - 0.5) * 0.3
+    });
+  }
+
+  setInterval(spawnMeteor, 900);
+
+  let t = 0;
+
+  function draw() {
+    t += 0.01;
+    ctx.clearRect(0, 0, W, H);
+
+    // Draw stars with twinkle
+    stars.forEach(s => {
+      const twinkle = 0.5 + 0.5 * Math.sin(t * s.tw + s.phase);
+      const opacity = s.o * (0.4 + 0.6 * twinkle);
+
+      // Star color variation: mostly white, some cyan, some faint green
+      const rand = (s.phase * 10) % 3;
+      let color;
+      if (rand < 0.5) color = `rgba(0,255,170,${opacity})`;
+      else if (rand < 1.2) color = `rgba(0,200,255,${opacity * 0.7})`;
+      else color = `rgba(220,230,255,${opacity})`;
+
+      ctx.beginPath();
+      ctx.arc(
+        (s.x + t * 3) % W,
+        s.y % H,
+        s.r * (0.8 + 0.2 * twinkle),
+        0, Math.PI * 2
+      );
+      ctx.fillStyle = color;
+      ctx.fill();
+    });
+
+    // Draw meteors
+    meteors = meteors.filter(m => {
+      m.x += Math.cos(m.angle) * m.speed;
+      m.y += Math.sin(m.angle) * m.speed;
+      m.op -= 0.012;
+
+      if (m.op <= 0) return false;
+
+      const tx = m.x - Math.cos(m.angle) * m.len;
+      const ty = m.y - Math.sin(m.angle) * m.len;
+
+      const grad = ctx.createLinearGradient(tx, ty, m.x, m.y);
+      grad.addColorStop(0, `rgba(0,255,170,0)`);
+      grad.addColorStop(0.6, `rgba(0,255,170,${m.op * 0.5})`);
+      grad.addColorStop(1, `rgba(255,255,255,${m.op})`);
+
+      ctx.beginPath();
+      ctx.moveTo(tx, ty);
+      ctx.lineTo(m.x, m.y);
+      ctx.strokeStyle = grad;
+      ctx.lineWidth = 1.5;
+      ctx.stroke();
+
+      // Bright head
+      ctx.beginPath();
+      ctx.arc(m.x, m.y, 1.5, 0, Math.PI * 2);
+      ctx.fillStyle = `rgba(255,255,255,${m.op})`;
+      ctx.fill();
+
+      return m.y < H + 50;
+    });
+
+    requestAnimationFrame(draw);
+  }
+
+  draw();
+})();
+
+/* ── COUNTER ANIMATION ── */
+function animateCounter(el, end, duration, suffix) {
+  const start = performance.now();
+  function step(now) {
+    const p = Math.min((now - start) / duration, 1);
+    const ease = 1 - Math.pow(1 - p, 3);
+    el.textContent = Math.round(ease * end).toLocaleString() + (suffix || '');
+    if (p < 1) requestAnimationFrame(step);
+  }
+  requestAnimationFrame(step);
+}
+
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      animateCounter(document.getElementById('c1'), 14, 1500);
+      animateCounter(document.getElementById('c2'), 48700, 2000, '+');
+      animateCounter(document.getElementById('c3'), 12, 1200);
+      animateCounter(document.getElementById('c4'), 86, 1800);
+      observer.disconnect();
+    }
+  });
+}, { threshold: 0.3 });
+
+observer.observe(document.querySelector('.metrics'));
+
+/* ── MODAL SYSTEM ── */
+const projects = {
+  'rag': {
+    title: 'RAG Pipeline Engine',
+    files: [
+      { icon: '📁', name: 'rag-pipeline/', desc: 'Root directory', size: '—' },
+      { icon: '🐳', name: 'docker-compose.yml', desc: 'Full stack orchestration', size: '2.1 KB' },
+      { icon: '🐍', name: 'backend/main.py', desc: 'FastAPI application entry', size: '3.8 KB' },
+      { icon: '🔍', name: 'backend/rag/pipeline.py', desc: 'Core RAG logic', size: '9.2 KB' },
+      { icon: '🧬', name: 'backend/rag/embeddings.py', desc: 'Embedding service', size: '4.1 KB' },
+      { icon: '🗄️', name: 'backend/rag/vectorstore.py', desc: 'Pinecone / Qdrant adapter', size: '5.6 KB' },
+      { icon: '⚛️', name: 'frontend/src/', desc: 'React UI source', size: '22 KB' },
+      { icon: '📝', name: '.env.example', desc: 'Environment variables template', size: '0.8 KB' },
+      { icon: '📖', name: 'README.md', desc: 'Full setup + deploy guide', size: '11 KB' },
+    ]
+  },
+  'tool-manager': {
+    title: 'AI Tool Manager App',
+    files: [
+      { icon: '📁', name: 'ai-tool-manager/', desc: 'Root directory', size: '—' },
+      { icon: '▲', name: 'app/', desc: 'Next.js 14 App Router', size: '34 KB' },
+      { icon: '🗄️', name: 'prisma/schema.prisma', desc: 'Database schema', size: '3.2 KB' },
+      { icon: '🔑', name: 'lib/auth.ts', desc: 'Clerk auth configuration', size: '1.8 KB' },
+      { icon: '💳', name: 'lib/stripe.ts', desc: 'Billing integration', size: '2.9 KB' },
+      { icon: '📡', name: 'app/api/', desc: 'REST API routes', size: '18 KB' },
+      { icon: '📝', name: '.env.example', desc: 'All required env vars', size: '1.1 KB' },
+      { icon: '📖', name: 'README.md', desc: 'Setup + Vercel deploy guide', size: '8 KB' },
+    ]
+  },
+  'llm-router': {
+    title: 'Smart LLM Router',
+    files: [
+      { icon: '📁', name: 'llm-router/', desc: 'Root directory', size: '—' },
+      { icon: '🟢', name: 'src/index.ts', desc: 'Express server entry', size: '1.2 KB' },
+      { icon: '🔀', name: 'src/router/engine.ts', desc: 'Routing logic', size: '7.4 KB' },
+      { icon: '📊', name: 'src/metrics/prometheus.ts', desc: 'Observability setup', size: '2.1 KB' },
+      { icon: '🐳', name: 'docker-compose.yml', desc: 'Node + Redis stack', size: '1.4 KB' },
+      { icon: '📝', name: '.env.example', desc: 'API keys template', size: '0.6 KB' },
+      { icon: '📖', name: 'README.md', desc: 'Full documentation', size: '6 KB' },
+    ]
+  },
+  'vector-search': {
+    title: 'Vector Search API',
+    files: [
+      { icon: '📁', name: 'vector-search-api/', desc: 'Root directory', size: '—' },
+      { icon: '🐍', name: 'app/main.py', desc: 'FastAPI entrypoint', size: '2.3 KB' },
+      { icon: '🧬', name: 'app/embedder.py', desc: 'Multi-model embedder', size: '4.8 KB' },
+      { icon: '🏆', name: 'app/reranker.py', desc: 'Cross-encoder reranking', size: '3.1 KB' },
+      { icon: '🐳', name: 'docker-compose.yml', desc: 'API + Qdrant stack', size: '1.8 KB' },
+      { icon: '📖', name: 'README.md', desc: 'API reference + deploy', size: '9 KB' },
+    ]
+  },
+  'prompt-registry': {
+    title: 'Prompt Registry & Versioner',
+    files: [
+      { icon: '📁', name: 'prompt-registry/', desc: 'Root directory', size: '—' },
+      { icon: '▲', name: 'app/', desc: 'Next.js frontend', size: '28 KB' },
+      { icon: '🐍', name: 'evaluator/', desc: 'Python eval harness', size: '12 KB' },
+      { icon: '🗄️', name: 'prisma/schema.prisma', desc: 'Prompt schema', size: '2.1 KB' },
+      { icon: '📝', name: '.env.example', desc: 'Config template', size: '0.7 KB' },
+      { icon: '📖', name: 'README.md', desc: 'Setup + usage guide', size: '7 KB' },
+    ]
+  },
+  'agent-orch': {
+    title: 'Multi-Agent Orchestrator',
+    files: [
+      { icon: '📁', name: 'agent-orchestrator/', desc: 'Root directory', size: '—' },
+      { icon: '🐍', name: 'backend/orchestrator.py', desc: 'LangGraph workflow engine', size: '11.2 KB' },
+      { icon: '🤖', name: 'backend/agents/', desc: 'Specialist agent library', size: '19 KB' },
+      { icon: '⚛️', name: 'frontend/flow-editor/', desc: 'React Flow visual editor', size: '16 KB' },
+      { icon: '⚡', name: 'worker/celery_tasks.py', desc: 'Async task queue', size: '4.2 KB' },
+      { icon: '🐳', name: 'docker-compose.yml', desc: 'Full stack config', size: '2.4 KB' },
+      { icon: '📖', name: 'README.md', desc: 'Architecture + deploy guide', size: '14 KB' },
+    ]
+  },
+  'all': {
+    title: 'Full CyberForge Bundle',
+    files: [
+      { icon: '📦', name: 'cyberforge-bundle.zip', desc: 'All 14 projects + shared libs', size: '~180 MB' },
+      { icon: '📋', name: 'BUNDLE_SETUP.md', desc: 'Getting started guide', size: '5 KB' },
+      { icon: '🐳', name: 'docker-compose.all.yml', desc: 'Run every project together', size: '8 KB' },
+      { icon: '📊', name: 'monitoring/', desc: 'Grafana + Prometheus configs', size: '12 KB' },
+    ]
+  }
+};
+
+function openModal(key) {
+  const proj = projects[key] || projects['rag'];
+  document.getElementById('modal-title').textContent = `↓ ${proj.title}`;
+
+  const filesHtml = proj.files.map(f => `
+    <div class="file-item">
+      <span class="file-icon">${f.icon}</span>
+      <span>
+        <span style="font-family:var(--font); color:var(--text); font-size:0.75rem;">${f.name}</span>
+        <br>
+        <span style="font-size:0.65rem; color:var(--muted);">${f.desc}</span>
+      </span>
+      <span class="file-size">${f.size}</span>
+    </div>
+  `).join('');
+
+  document.getElementById('modal-files').innerHTML = filesHtml;
+  document.getElementById('modal').classList.add('open');
+  document.body.style.overflow = 'hidden';
+  window._currentProject = key;
+}
+
+function closeModal() {
+  document.getElementById('modal').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+function downloadProject() {
+  const key = window._currentProject || 'rag';
+  const proj = projects[key];
+
+  // Generate a real downloadable text package as a zip-like file
+  const content = generateProjectContent(key);
+  const blob = new Blob([content], { type: 'text/plain' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `cyberforge-${key}.md`;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+  closeModal();
+}
+
+function generateProjectContent(key) {
+  const contents = {
+    'rag': `# CyberForge — RAG Pipeline Engine
+# Complete Production-Ready Setup Guide
+# ============================================================
+
+## Quick Start (3 commands)
+\`\`\`bash
+git clone https://github.com/your-org/rag-pipeline
+cp .env.example .env   # add OPENAI_API_KEY and PINECONE_API_KEY
+docker compose up -d
+\`\`\`
+UI → http://localhost:3000 | API → http://localhost:8000
+
+---
+
+## Project Structure
+\`\`\`
+rag-pipeline/
+├── backend/
+│   ├── main.py                 # FastAPI app
+│   ├── rag/
+│   │   ├── pipeline.py         # Core RAG orchestrator
+│   │   ├── embeddings.py       # OpenAI / local embedding adapter
+│   │   ├── vectorstore.py      # Pinecone / Qdrant connector
+│   │   ├── chunker.py          # Smart text splitter
+│   │   └── reranker.py         # Cohere / cross-encoder reranking
+│   ├── api/
+│   │   ├── routes/ingest.py    # Document upload endpoint
+│   │   ├── routes/query.py     # Query + answer endpoint
+│   │   └── routes/health.py    # Health check
+│   └── requirements.txt
+├── frontend/
+│   ├── src/
+│   │   ├── App.tsx
+│   │   ├── components/Chat.tsx
+│   │   ├── components/Upload.tsx
+│   │   └── services/api.ts
+│   └── package.json
+├── docker-compose.yml
+├── .env.example
+└── README.md
+\`\`\`
+
+---
+
+## .env.example
+\`\`\`env
+# LLM
+OPENAI_API_KEY=sk-...
+OPENAI_MODEL=gpt-4-turbo-preview
+ANTHROPIC_API_KEY=sk-ant-...
+
+# Vector DB (choose one)
+PINECONE_API_KEY=...
+PINECONE_ENVIRONMENT=us-east-1-aws
+PINECONE_INDEX_NAME=rag-docs
+
+# Optional: Qdrant (self-hosted)
+QDRANT_URL=http://localhost:6333
+QDRANT_COLLECTION=documents
+
+# Reranking
+COHERE_API_KEY=...
+
+# Redis cache
+REDIS_URL=redis://localhost:6379
+
+# App
+API_PORT=8000
+UI_PORT=3000
+CHUNK_SIZE=500
+CHUNK_OVERLAP=50
+TOP_K_RETRIEVE=10
+TOP_K_RERANK=3
+\`\`\`
+
+---
+
+## docker-compose.yml
+\`\`\`yaml
+version: '3.9'
+services:
+  api:
+    build: ./backend
+    ports: ["8000:8000"]
+    env_file: .env
+    depends_on: [redis]
+    volumes:
+      - ./uploads:/app/uploads
+
+  ui:
+    build: ./frontend
+    ports: ["3000:3000"]
+    environment:
+      - NEXT_PUBLIC_API_URL=http://localhost:8000
+
+  redis:
+    image: redis:7-alpine
+    ports: ["6379:6379"]
+
+  qdrant:           # optional self-hosted vector db
+    image: qdrant/qdrant
+    ports: ["6333:6333"]
+    volumes:
+      - qdrant_data:/qdrant/storage
+
+volumes:
+  qdrant_data:
+\`\`\`
+
+---
+
+## backend/rag/pipeline.py (Core Logic)
+\`\`\`python
+from langchain.text_splitter import RecursiveCharacterTextSplitter
+from langchain_openai import OpenAIEmbeddings, ChatOpenAI
+from langchain.chains import RetrievalQAWithSourcesChain
+from langchain_pinecone import PineconeVectorStore
+import redis, json, hashlib
+
+class RAGPipeline:
+    def __init__(self, config):
+        self.embeddings = OpenAIEmbeddings(model="text-embedding-3-large")
+        self.llm = ChatOpenAI(model=config.OPENAI_MODEL, temperature=0, streaming=True)
+        self.splitter = RecursiveCharacterTextSplitter(
+            chunk_size=config.CHUNK_SIZE,
+            chunk_overlap=config.CHUNK_OVERLAP,
+            separators=["\\n\\n", "\\n", ".", " ", ""]
+        )
+        self.vectorstore = PineconeVectorStore(
+            index_name=config.PINECONE_INDEX_NAME,
+            embedding=self.embeddings
+        )
+        self.cache = redis.from_url(config.REDIS_URL)
+
+    def ingest(self, text: str, metadata: dict) -> int:
+        chunks = self.splitter.split_text(text)
+        docs = [{"text": c, **metadata} for c in chunks]
+        self.vectorstore.add_texts([d["text"] for d in docs], metadatas=docs)
+        return len(chunks)
+
+    def query(self, question: str, top_k: int = 5) -> dict:
+        cache_key = hashlib.md5(question.encode()).hexdigest()
+        cached = self.cache.get(cache_key)
+        if cached:
+            return json.loads(cached)
+
+        retriever = self.vectorstore.as_retriever(
+            search_type="mmr",
+            search_kwargs={"k": top_k, "fetch_k": top_k * 3}
+        )
+        chain = RetrievalQAWithSourcesChain.from_chain_type(
+            llm=self.llm,
+            retriever=retriever,
+            return_source_documents=True
+        )
+        result = chain({"question": question})
+        response = {
+            "answer": result["answer"],
+            "sources": [d.metadata for d in result["source_documents"]]
+        }
+        self.cache.setex(cache_key, 3600, json.dumps(response))
+        return response
+\`\`\`
+
+---
+
+## API Routes (backend/api/routes/query.py)
+\`\`\`python
+from fastapi import APIRouter, HTTPException
+from pydantic import BaseModel
+from ..pipeline import pipeline
+
+router = APIRouter()
+
+class QueryRequest(BaseModel):
+    q: str
+    top_k: int = 5
+    collection: str = "default"
+
+@router.post("/query")
+async def query(req: QueryRequest):
+    try:
+        result = pipeline.query(req.q, top_k=req.top_k)
+        return result
+    except Exception as e:
+        raise HTTPException(500, str(e))
+
+@router.post("/ingest")
+async def ingest(file: UploadFile, collection: str = "default"):
+    text = await extract_text(file)
+    chunks = pipeline.ingest(text, {"source": file.filename, "collection": collection})
+    return {"status": "ok", "chunks": chunks}
+\`\`\`
+
+---
+
+## Deploy to Railway (1 click)
+\`\`\`bash
+npm install -g @railway/cli
+railway login
+railway init
+railway up
+railway domain         # get public URL
+\`\`\`
+
+## Deploy to AWS ECS
+See /docs/deploy-aws.md included in the full download.
+
+---
+
+## Troubleshooting
+- "Pinecone index not found" → run \`python scripts/create_index.py\` first
+- "OpenAI quota exceeded" → check your usage at platform.openai.com
+- Redis connection refused → ensure docker compose is running
+
+## Support
+Open an issue at github.com/cyberforge/rag-pipeline
+`,
+
+    'tool-manager': `# CyberForge — AI Tool Manager App
+# Complete SaaS Starter Kit
+# ============================================================
+
+## Stack
+- Next.js 14 (App Router + Server Actions)
+- TypeScript
+- Prisma + PostgreSQL
+- Clerk (auth)
+- Stripe (billing)
+- Tailwind CSS
+- shadcn/ui
+
+## Quick Start
+\`\`\`bash
+git clone https://github.com/cyberforge/ai-tool-manager
+cd ai-tool-manager
+npm install
+cp .env.example .env.local
+npx prisma migrate dev
+npm run dev
+\`\`\`
+
+## .env.example
+\`\`\`env
+DATABASE_URL=postgresql://user:pass@localhost:5432/toolmanager
+NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=pk_...
+CLERK_SECRET_KEY=sk_...
+STRIPE_SECRET_KEY=sk_live_...
+STRIPE_WEBHOOK_SECRET=whsec_...
+OPENAI_API_KEY=sk-...
+ANTHROPIC_API_KEY=sk-ant-...
+\`\`\`
+
+## Key Features
+- Multi-tenant workspace isolation
+- API key vault (encrypted at rest)
+- Per-tool rate limiting + quotas
+- Cost tracking per model / per user
+- Webhook triggers on tool events
+- Usage analytics dashboard
+- Role-based access control
+
+## Prisma Schema (prisma/schema.prisma)
+\`\`\`prisma
+model Tool {
+  id          String   @id @default(cuid())
+  name        String
+  description String?
+  endpoint    String
+  apiKey      String   @db.Text
+  rateLimit   Int      @default(100)
+  createdAt   DateTime @default(now())
+  workspace   Workspace @relation(fields: [workspaceId], references: [id])
+  workspaceId String
+  usageLogs   UsageLog[]
+}
+
+model UsageLog {
+  id        String   @id @default(cuid())
+  toolId    String
+  model     String
+  tokens    Int
+  cost      Float
+  latency   Int
+  createdAt DateTime @default(now())
+  tool      Tool     @relation(fields: [toolId], references: [id])
+}
+\`\`\`
+
+## Deploy to Vercel
+\`\`\`bash
+npm install -g vercel
+vercel --prod
+\`\`\`
+`,
+
+    'all': `# CyberForge — Full Bundle
+# ============================================================
+# This bundle contains all 14 AI infrastructure projects.
+# See individual project READMEs for setup instructions.
+
+## Included Projects
+1. RAG Pipeline Engine (Python + FastAPI + LangChain)
+2. AI Tool Manager App (Next.js 14 + TypeScript + Prisma)
+3. Smart LLM Router (Node.js + Redis)
+4. Vector Search API (Python + FastAPI + Qdrant)
+5. Prompt Registry & Versioner (Next.js + MongoDB)
+6. Multi-Agent Orchestrator (Python + LangGraph + CrewAI)
+7. Embedding Microservice (Python + FastAPI)
+8. Model Gateway (Node.js + Rate limiting)
+9. AI Observability Dashboard (Grafana + Prometheus)
+10. Document QA Chatbot (Streamlit + LangChain)
+11. Semantic Cache Layer (Redis + OpenAI)
+12. Evaluation Harness (Python + RAGAS)
+13. Fine-tuning Pipeline (Python + HuggingFace)
+14. AI Cost Optimizer (Node.js + Analytics)
+
+## Getting Started
+See BUNDLE_SETUP.md for full instructions.
+
+## Prerequisites
+- Docker + Docker Compose
+- Node.js 20+
+- Python 3.11+
+- API keys: OpenAI, Anthropic (optional), Pinecone/Qdrant
+
+## Run Everything
+\`\`\`bash
+docker compose -f docker-compose.all.yml up -d
+\`\`\`
+`
+  };
+
+  return contents[key] || contents['rag'];
+}
+
+// Close modal on overlay click
+document.getElementById('modal').addEventListener('click', function(e) {
+  if (e.target === this) closeModal();
+});
+
+// Close on Escape
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') closeModal();
+});
+</script>
+</body>
+</html>
+`,
